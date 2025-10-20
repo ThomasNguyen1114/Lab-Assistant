@@ -50,27 +50,22 @@ print(f"Feature dimensions: {X.shape[1]}")
 print(f"\nClass distribution in training:")
 print(pd.Series(Y_train).value_counts())
 
-# Create pipeline with PCA for dimensionality reduction
 print("\nTraining model with PCA + SVM...")
 pipeline = Pipeline([
     ('pca', PCA(n_components=100)),  # Reduce to 100 components
     ('svm', svm.SVC(kernel='linear'))
 ])
 
-# Train the model
 pipeline.fit(X_train, Y_train)
 
-# Test set predictions
 fruit_predictions = pipeline.predict(X_test)
 test_accuracy = accuracy_score(Y_test, fruit_predictions) * 100
 print(f"\nTest Set Accuracy: {test_accuracy:.2f}%")
 
-# Cross-validation (this will be much faster now)
 print("\nPerforming 5-fold cross-validation...")
 scores = cross_val_score(pipeline, X_train, Y_train, cv=5)
 print(f"Cross-validation scores: {scores}")
 print(f"Mean CV accuracy: {scores.mean() * 100:.2f}% (+/- {scores.std() * 100:.2f}%)")
 
-# Detailed classification report
 print("\nClassification Report:")
 print(classification_report(Y_test, fruit_predictions))
